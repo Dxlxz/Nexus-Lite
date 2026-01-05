@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-text font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .data-grid-bg {
+    background-image: linear-gradient(to right, #30363d 1px, transparent 1px),
+      linear-gradient(to bottom, #30363d 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.05;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-muted;
+}
+
+/* Data Table Styling */
+.table-cell-highlight {
+  @apply bg-primary/5 border-l-2 border-primary;
+}
+
+/* XML Syntax Highlighting - Bloomberg Style */
+.xml-tag {
+  @apply text-primary font-bold;
+}
+.xml-attribute {
+  @apply text-warning;
+}
+.xml-value {
+  @apply text-success;
+}
+.xml-comment {
+  @apply text-text-muted italic;
+}

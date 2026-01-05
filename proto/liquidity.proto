@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package liquidity;
+
+option go_package = "github.com/paynet/nexus-lite/proto";
+
+// LiquidityCheckService provides liquidity prediction for banks
+service LiquidityCheckService {
+  // CheckLiquidity validates if a bank has sufficient funds for a transaction
+  rpc CheckLiquidity(LiquidityCheckRequest) returns (LiquidityCheckResponse);
+
+  // CreditBank credits a bank when it receives funds
+  rpc CreditBank(CreditBankRequest) returns (CreditBankResponse);
+
+  // GetBalances returns the current balances for all banks
+  rpc GetBalances(GetBalancesRequest) returns (GetBalancesResponse);
+}
+
+// Request message for liquidity check
+message LiquidityCheckRequest {
+  string bank_id = 1;              // Bank identifier (e.g., "MAYBANK", "CIMB")
+  double transaction_amount = 2;   // Transaction amount
+  string currency = 3;             // Currency code (e.g., "MYR", "USD")
+}
+
+// Response message for liquidity check
+message LiquidityCheckResponse {
+  bool approved = 1;               // Whether the transaction is approved
+  double available_balance = 2;     // Remaining balance after transaction
+  string error_code = 3;           // Error code if rejected: "AC04", "AM04", or "OK"
+  string error_message = 4;        // Human-readable error message
+}
+
+// Request message for crediting a bank
+message CreditBankRequest {
+  string bank_id = 1;              // Bank identifier receiving funds
+  double amount = 2;               // Amount to credit
+  string currency = 3;             // Currency code
+}
+
+// Response message for crediting a bank
+message CreditBankResponse {
+  bool success = 1;                // Whether the credit was successful
+  double new_balance = 2;          // New balance after credit
+  string status_code = 3;          // Status code
+  string message = 4;              // Status message
+}
+
+// Request message for getting all balances
+message GetBalancesRequest {}
+
+// Response message for getting all balances
+message GetBalancesResponse {
+  repeated BankBalance balances = 1;
+}
+
+// Bank balance information
+message BankBalance {
+  string bank_id = 1;
+  double balance = 2;
+  string currency = 3;
+}
+
+// Error codes (ISO 20022 standard):
+// AC04 - Closed Account (bank not found)
+// AM04 - Insufficient Funds
+// OK - Transaction Approved
